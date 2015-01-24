@@ -31,6 +31,7 @@ module.exports = function(grunt) {
     separator: '-',             // separator between name and filesize
     tryAnimated: false,         // DEFAULT CHANGED - whether to try to resize animated files
     upscale: false,             // whether to upscale the image
+    trim: true,                 // whether to remove borders
     sizes: [{
       name: 'small',
       width: 320
@@ -351,6 +352,11 @@ module.exports = function(grunt) {
           .resize(sizeOptions.width, sizeOptions.height, sizingMethod)
           .quality(sizeOptions.quality);
 
+
+        if (options.trim) {
+          image.trim();
+        }
+        
         if (mode === 'crop') {
           image
           .gravity(sizeOptions.gravity)
