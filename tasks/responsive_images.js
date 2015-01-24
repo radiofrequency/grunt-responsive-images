@@ -353,10 +353,10 @@ module.exports = function(grunt) {
           .quality(sizeOptions.quality);
 
 
-        if (options.trim) {
+        if (sizeOptions.trim) {
           image.trim();
         }
-        
+
         if (mode === 'crop') {
           image
           .gravity(sizeOptions.gravity)
