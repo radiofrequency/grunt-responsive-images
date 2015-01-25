@@ -486,23 +486,37 @@ module.exports = function(grunt) {
         // remove pixels from the value so the gfx process doesn't complain
         sizeOptions = removeCharsFromObjectValue(sizeOptions, ['width', 'height'], 'px');
 
-        series.push(function(callback) {
 
-          if (sizeOptions.newFilesOnly) {
-            if (isFileNewVersion(srcPath, dstPath)) {
-              return processImage(srcPath, dstPath, sizeOptions, tally, callback);
-            } else {
-              grunt.verbose.ok('File already exists: ' + dstPath);
-              return callback();
-            }
-          } else {
-            return processImage(srcPath, dstPath, sizeOptions, tally, callback);
+         var skip = false;
+        if (sizeOptions.newFilesOnly) {
+          if(!isFileNewVersion(srcPath, dstPath)) {
+            var skip = true;
+             grunt.verbose.ok('File already exists: ' + dstPath);
           }
+        }
 
-        });
+        if (!skip) {
+
+
+          series.push(function(callback) {
+
+            if (sizeOptions.newFilesOnly) {
+              if (isFileNewVersion(srcPath, dstPath)) {
+                return processImage(srcPath, dstPath, sizeOptions, tally, callback);
+              } else {
+                grunt.verbose.ok('File already exists: ' + dstPath);
+                return callback();
+              }
+            } else {
+              return processImage(srcPath, dstPath, sizeOptions, tally, callback);
+            }
+
+          });
+        }
       });
 
       series.push(function(callback) {
+        grunt.verbose.ok('')
         outputResult(tally[sizeOptions.id], sizeOptions.name);
         return callback();
       });
