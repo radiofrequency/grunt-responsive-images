@@ -312,6 +312,10 @@ module.exports = function(grunt) {
     var image = gfxEngine(srcPath);
 
     image.identify(function(err, data) {
+      if (err) {
+        console.log("error processing file", err, srcPath);
+        return callback();
+      }
       if (!isAnimatedGif(data, dstPath, sizeOptions.tryAnimated)) {
       image.size(function(error, size) {
         var sizingMethod = '';
